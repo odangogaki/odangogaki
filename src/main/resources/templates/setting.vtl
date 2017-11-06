@@ -1,0 +1,187 @@
+
+
+
+			<div class="row" style=" background:green; height:100vh; width;100vh;">
+
+				<div class="col-xs-6" style="background:pink; height:100%;width:50%; overflow:scroll; ">
+					<p style="display:block">登録フォーム</p>
+
+
+					<ul >
+						<li id="je0" style="background:orange" onclick="colorON(this)"; >$japanese0 = $english0</li>
+						<li id="je1" style="background:orange" onclick="colorON(this)";>$japanese1 = $english1</li>
+						<li id="je2" style="background:orange" onclick="colorON(this)";>$japanese2 = $english2</li>
+						<li id="je3" style="background:orange" onclick="colorON(this)";>$japanese3 = $english3</li>
+						<li id="je4" style="background:orange" onclick="colorON(this)";>$japanese4 = $english4</li>
+						<li id="je5" style="background:orange" onclick="colorON(this)";>$japanese5 = $english5</li>
+						<li id="je6" style="background:orange" onclick="colorON(this)";>$japanese6 = $english6</li>
+						<li id="je7" style="background:orange" onclick="colorON(this)";>$japanese7 = $english7</li>
+						<li id="je8" style="background:orange" onclick="colorON(this)";>$japanese8 = $english8</li>
+						<li id="je9" style="background:orange" onclick="colorON(this)";>$japanese9 = $english9</li>
+
+						<li id="je10" style="background:orange" onclick="colorON(this)";>$japanese10 = $english10</li>
+						<li id="je11" style="background:orange" onclick="colorON(this)";>$japanese11 = $english11</li>
+						<li id="je12" style="background:orange" onclick="colorON(this)";>$japanese12 = $english12</li>
+						<li id="je13" style="background:orange" onclick="colorON(this)";>$japanese13 = $english13</li>
+						<li id="je14" style="background:orange" onclick="colorON(this)";>$japanese14 = $english14</li>
+						<li id="je15" style="background:orange" onclick="colorON(this)";>$japanese15 = $english15</li>
+						<li id="je16" style="background:orange" onclick="colorON(this)";>$japanese16 = $english16</li>
+						<li id="je17" style="background:orange" onclick="colorON(this)";>$japanese17 = $english17</li>
+						<li id="je18" style="background:orange" onclick="colorON(this)";>$japanese18 = $english18</li>
+						<li id="je19" style="background:orange" onclick="colorON(this)";>$japanese19 = $english19</li>
+
+						<li id="je20" style="background:orange" onclick="colorON(this)";>$japanese20 = $english20</li>
+						<li id="je21" style="background:orange" onclick="colorON(this)";>$japanese21 = $english21</li>
+						<li id="je22" style="background:orange" onclick="colorON(this)";>$japanese22 = $english22</li>
+						<li id="je23" style="background:orange" onclick="colorON(this)";>$japanese23 = $english23</li>
+						<li id="je24" style="background:orange" onclick="colorON(this)";>$japanese24 = $english24</li>
+						<li id="je25" style="background:orange" onclick="colorON(this)";>$japanese25 = $english25</li>
+						<li id="je26" style="background:orange" onclick="colorON(this)";>$japanese26 = $english26</li>
+						<li id="je27" style="background:orange" onclick="colorON(this)";>$japanese27 = $english27</li>
+						<li id="je28" style="background:orange" onclick="colorON(this)";>$japanese28 = $english28</li>
+						<li id="je29" style="background:orange" onclick="colorON(this)";>$japanese29 = $english29</li>
+
+
+
+
+					</ul>
+
+				</div>
+
+				<div class="col-xs-6" style=" background:yellow; height:100%; width:50%; ">
+
+
+
+
+							<div class="row" style=" background:brown; height:50%;width:110%;">
+								<div class="co-xs-12">
+									<p style="background:orange; border:double 5px brown; height:10%; width:100%;left:0; top:0; right:0; bottom:0; position:absolute;  justify-content:center;  display:flex; align-items:center; text-decoration:underline;">登録フォーム</p>
+
+
+									<form action="/register" #* これを消したらうまくいくsubmitでregistermethod="post"*# style="border:double;">
+
+									##<form action="uri>から</form>でデータやactionをおこすものを含むものすべてかこわなければならない
+									<div class="form-group">
+
+
+									<label style="position:absolute;margin:auto;top:10%;"><p style="left:0%; background:gray;border: solid; height:10vh;width:20vh;margin-bottom:0; font-size:6vh;">日本語</p><input id="japanese" name="japanese" class="form-control"  type="text"  style="width:100%;"></label>
+
+									</div>
+
+
+									<div class="form-group">
+
+
+									<label style="position:absolute;margin:auto;top:25%;"><p style="left:0%; background:gray;border: solid; height:10vh;width:20vh;margin-bottom:0; font-size:6vh;">英語</p><input id="english" name="english" class="form-control"  type="text"  style="width:100%;"></label>
+
+
+									</div>
+
+
+
+								</div>
+							</div>
+
+
+
+							<div class="row" style=" background:green;height:50%;width:100%;">
+
+
+										<button type="submit" class="btn btn-default" name="register"  value="touroku" style="height:33%;width:100%;">登録</button>
+									</form>
+
+									<form action="/delete" style="height:33%; width:100%; border:double; ">
+									<button type="submit"  id="deletebutton"   name="delete" value="shoukyo" style="height:100%;width:100%;">削除</button>
+
+									</form>
+
+
+									<button onclick="location.href='/title'" style="height:34%;width:100%;">戻る</button>
+
+
+
+							</div>
+
+
+
+
+
+
+				</div>
+
+
+			</div>
+
+
+	<script>
+
+
+		for(var j = 0; j<30; j++){
+
+			console.log($('#' + 'je' +j).text());
+
+			if($('#' + 'je' +j).text() == '$japanese'+j + ' = '+ '$english'+j){
+				document.getElementById('je' +j).style.display="none" ;
+				console.log("OK");
+
+			}
+
+		}
+
+
+
+
+
+		var deleteobject;
+
+
+
+		function colorON(object){
+
+
+			alert('テスト');
+
+
+
+
+			console.log(object);
+
+			console.log(object.id);
+
+			for(var i = 0; i<30; i++){
+
+				$('#' + 'je' + i).css('background', 'orange');
+
+			}
+
+			$('#' + object.id).css('background','blue');
+
+			deleteobject = $('#' + object.id).text();
+
+			console.log(deleteobject);
+
+
+
+
+				document.getElementById('deletebutton').value = deleteobject;
+				console.log("OK");
+
+
+
+			console.log(document.getElementById('deletebutton').value);
+
+
+
+
+
+
+
+		}
+
+
+
+
+	</script>
+
+
+
