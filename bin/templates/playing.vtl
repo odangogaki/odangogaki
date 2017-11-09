@@ -9,8 +9,67 @@
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 
+
+
+
+
+
+
+	</head>
+	<body>
+		<div class="contaier" style="background:lightgray;">
+
+			<div class="row"  id ="top" style="height:10vh; background:lightblue">
+
+
+				<div class="col-xs-12" style="background:silver; height:100% ;">
+					<div class="progress"   style=" bottom:0; right:0; top:0; position:absolute; margin:auto; width:75%; height:70%; border:double; border-width:5px" >
+					  <div id= "progress" class="progress-bar progress-bar-striped active progress-bar-success" id="timeprogressbar"  role="progressbar" aria-valuenow="70%"
+					 		 aria-valuemin="0" aria-valuemax="100" style="width:100%;" >
+					    <span class="sr-only">70% Complete</span>
+					  </div>
+					</div>
+				</div>
+
+
+
+			</div>
+
+
+			<div class="row"  id ="middle" style="height:40vh; background:lightblue; border-bottom:ridge brown 5px ; " >
+				<div class="col-xs-3" style=" height:100%;">
+					<img src='/images/odanngogaki.png' alt="odagogaki" style="height:100%; width:100%;  top:0; bottom:0;left:0; position:absolute; margin:auto; " >
+				</div>
+
+
+				<div class="col-xs-9" style=" height:100%;">
+					<input type="text" readonly id="enemy" value=$answer  name="answer" style=" background-image:url(/images/fire.jpg); background-size:contain; height:100%; width:33%;  top:0; right:0%; bottom:0; position:absolute; margin: auto; text-align:center; vertical-align:middle; border: dashed ; font-size:200%; color:white;">
+				</div>
+
+			</div>
+
+
+			<div class="row" id ="under"  style="height:50vh; background:linear-gradient(burlywood,saddlebrown );">
+
+				<div class="col-xs-12" style=" height:100%"><input type="text" value=$question  readonly style=" background:skyblue;height:70%; width:70%; left:0; top:0; right:0; bottom:0; position:absolute; margin:auto; text-align:center; vertical-align;middle; border:double; border-width: 5px; font-size:15vmin "></div>
+
+
+			</div>
+
+
+
+
+
+		</div>
+
+
+
+
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
 
 		<script language="JavaScript">
 
@@ -146,54 +205,6 @@
 
 
 
-
-
-	</head>
-	<body>
-		<div class="contaier" style="background:lightgray;">
-
-			<div class="row" style="height:10vh; background:lightblue">
-
-
-				<div class="col-xs-12" style="background:silver; height:100% ;">
-					<div class="progress" style=" bottom:0; right:0; top:0; position:absolute; margin:auto; width:75%; height:70%; border:double; border-width:5px" >
-					  <div class="progress-bar progress-bar-striped active progress-bar-success" id="timeprogressbar"  role="progressbar" aria-valuenow="70%"
-					 		 aria-valuemin="0" aria-valuemax="100" style="width:100%;" >
-					    <span class="sr-only">70% Complete</span>
-					  </div>
-					</div>
-				</div>
-
-
-
-			</div>
-
-
-			<div class="row" style="height:40vh; background:lightblue; border-bottom:ridge brown 5px ; " >
-				<div class="col-xs-3" style=" height:100%;">
-					<img src='/images/odanngogaki.png' alt="odagogaki" style="height:100%; width:100%;  top:0; bottom:0;left:0; position:absolute; margin:auto; " >
-				</div>
-
-
-				<div class="col-xs-9" style=" height:100%;">
-					<input type="text" readonly id="enemy" value=$answer  name="answer" style=" background-image:url(/images/fire.jpg); background-size:contain; height:100%; width:33%;  top:0; right:0%; bottom:0; position:absolute; margin: auto; text-align:center; vertical-align:middle; border: dashed ; font-size:200%; color:white;">
-				</div>
-
-			</div>
-
-
-			<div class="row" style="height:50vh; background:linear-gradient(burlywood,saddlebrown );">
-
-				<div class="col-xs-12" style=" height:100%"><input type="text" value=$question  readonly style=" background:skyblue;height:70%; width:70%; left:0; top:0; right:0; bottom:0; position:absolute; margin:auto; text-align:center; vertical-align;middle; border:double; border-width: 5px; font-size:15vmin "></div>
-
-
-			</div>
-
-
-
-
-
-		</div>
 	</body>
 </html>
 

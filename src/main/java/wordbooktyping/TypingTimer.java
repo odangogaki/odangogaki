@@ -1,5 +1,6 @@
 package wordbooktyping;
 
+//使ってないクラス、記念においてある
 
 import static spark.Spark.*;
 
