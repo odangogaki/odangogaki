@@ -47,7 +47,7 @@ public class Title {
 
 			HashMap model= new HashMap();
 
-			model = setting(request);
+			model = setting(/*request*/);
 
 
 			return new ModelAndView(model, layout);
@@ -66,7 +66,7 @@ public class Title {
 
 			registry(request);
 
-			model = setting(request);
+			model = setting(/*request*/);
 
 
 
@@ -91,7 +91,7 @@ public class Title {
 			delete(request);
 
 
-			model = setting(request);
+			model = setting(/*request*/);
 
 
 
@@ -187,7 +187,7 @@ public class Title {
 	}
 
 
-	public static HashMap setting(Request request){
+	public static HashMap setting(/*Request request*/){
 		WordBookDB db  = new WordBookDB();
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
 		ArrayList<String> englishwordlist = new ArrayList<String>();
@@ -218,6 +218,7 @@ public class Title {
 				japanesearray = (String[])japanesewordlist.toArray(new String[]{});
 				String[] englisharray = new String[englishwordlist.size()];
 				englisharray = (String[]) englishwordlist.toArray(new String[]{});;
+				model.put("listsize", japanesewordlist.size());
 
 				 for(int i = 0; i<30; i++){
 					japanesecodearray[i] = "japanese"+i;
@@ -254,10 +255,10 @@ public class Title {
 
 
 
-		System.err.println("Request parameters:"+(Arrays.asList(request.queryMap())));
+//		System.err.println("Request parameters:"+(Arrays.asList(request.queryMap())));
 
 		//データの数がわかる
-		System.err.println("count of params: " + request.queryMap().toMap().size());
+//		System.err.println("count of params: " + request.queryMap().toMap().size());
 
 
 

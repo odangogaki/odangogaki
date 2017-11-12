@@ -1,4 +1,4 @@
-		
+<
 
 
 			<div class="row" style=" background:green; height:100vh; width;100vh;">
@@ -7,7 +7,7 @@
 					<p style="display:block">登録フォーム</p>
 
 
-					<ul >
+					<ul id = "wordlist_container">
 						<li id="je0" style="background:orange" onclick="colorON(this)"; >$japanese0 = $english0</li>
 						<li id="je1" style="background:orange" onclick="colorON(this)";>$japanese1 = $english1</li>
 						<li id="je2" style="background:orange" onclick="colorON(this)";>$japanese2 = $english2</li>
@@ -114,6 +114,48 @@
 
 
 	<script>
+
+
+
+
+
+
+#*		document.addEventListener("DOMContentLoaded", function(){
+			for(var k = 0; k<$listsize; k++){
+			var wordlistcontainer = document.getElementById("wordlist_container");
+			var item = document.createElement("li");
+
+
+
+			eval("var $japanese" + k +"=$japanese" + k + ";");
+
+			var $japanese0; ←この書き方なら「japanese0」というキーとして認識し、「空」と表示されます
+			var $japanese1;
+			var $japanese2;
+			var "$japanese" + k; ←この書き方では「$japanese0」というテキストで表示されます
+
+
+
+			ここがうまくいきません。$japanese0 = $english0 と表示されてしまいます。
+			↓
+			item.textContent = "$japanese" + k     +  ' = '+ '$english' + k;
+
+			item.setAttribute("id","je" + k);
+			item.setAttribute("style","background:orange");
+			item.setAttribute("onclick", "colorON(this)");
+
+			wordlistcontainer.appendChild(item);
+
+
+			}
+		});
+
+
+*#
+
+
+
+
 
 
 		for(var j = 0; j<30; j++){
