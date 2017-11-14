@@ -8,7 +8,7 @@
 
 
 					<ul id = "wordlist_container">
-						<li id="je0" style="background:orange" onclick="colorON(this)"; >$japanese0 = $english0</li>
+#*						<li id="je0" style="background:orange" onclick="colorON(this)"; >$japanese0 = $english0</li>
 						<li id="je1" style="background:orange" onclick="colorON(this)";>$japanese1 = $english1</li>
 						<li id="je2" style="background:orange" onclick="colorON(this)";>$japanese2 = $english2</li>
 						<li id="je3" style="background:orange" onclick="colorON(this)";>$japanese3 = $english3</li>
@@ -41,7 +41,7 @@
 						<li id="je28" style="background:orange" onclick="colorON(this)";>$japanese28 = $english28</li>
 						<li id="je29" style="background:orange" onclick="colorON(this)";>$japanese29 = $english29</li>
 
-
+*#
 
 
 					</ul>
@@ -119,8 +119,60 @@
 
 
 
+##結局キー（＄japanese０とか）を数値を変えて動的に追加してキーとして認識させる方法がわからない
+##単に文字列の結合にするとうまくいかない
+##evalも変数名としか見てくれず、キーとして判断してくれない
+##window[]もキーとしてみてくれない
+##直接＄japanese０と書かなくてもキーとしてみてくれる方法はないものか・・・
 
-#*		document.addEventListener("DOMContentLoaded", function(){
+##解決！！！
+
+
+##JavaからはArrayListでHashMapにputする
+		console.log("$japanesekey");
+		console.log("$englishkey[0]");
+		console.log("$englishkey[1]");
+		console.log("$japanesekey[1]");
+##受け取った$japanesekey(object??)をダブルクオーテーションで囲み、強制的に文字列にする
+##最初と最後に[]があるのでString.sliceでとる
+		var japanesekeykadotori  = "$japanesekey".slice(1, -1);
+		console.log(japanesekeykadotori);
+##角をとったものをString.split(", ")で単語ごとに分ける
+##カンマの後ろに半角の空白があるので「, 」でわけること！！
+##配列としてjapaneseを入手し、これでやっとfor文で使える！
+		var japanese = japanesekeykadotori.split(", ");
+		console.log(japanese);
+##englishもjapaneseと同様
+		var englishkeykadotori  = "$englishkey".slice(1, -1);
+		console.log(englishkeykadotori);
+		var english = englishkeykadotori.split(", ");
+		console.log(english);
+
+		for(var k = 0; k<parseInt($listsize); k++){
+			var wordlistcontainer = document.getElementById("wordlist_container");
+			var item = document.createElement("li");
+
+			console.log(japanese[k]);
+			console.log(english[k]);
+
+			item.textContent = japanese[k] + " = " +  english[k];
+			item.setAttribute("id","je" + k);
+			item.setAttribute("style","background:orange");
+			item.setAttribute("onclick", "colorON(this)");
+
+			wordlistcontainer.appendChild(item);
+		}
+
+
+
+
+
+
+
+
+
+#*		document.addEventListener("DOMContentLoaded",
+			function(){
 			for(var k = 0; k<$listsize; k++){
 			var wordlistcontainer = document.getElementById("wordlist_container");
 			var item = document.createElement("li");
@@ -151,6 +203,9 @@
 		});
 
 
+
+
+
 *#
 
 
@@ -163,7 +218,7 @@
 			console.log($('#' + 'je' +j).text());
 
 			if($('#' + 'je' +j).text() == '$japanese'+j + ' = '+ '$english'+j){
-				document.getElementById('je' +j).style.display="none" ;
+##				document.getElementById('je' +j).style.display="none" ;
 				console.log("OK");
 
 			}
@@ -224,6 +279,4 @@
 
 
 	</script>
-
-
 

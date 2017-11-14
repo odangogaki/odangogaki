@@ -29,14 +29,8 @@ dependencies {
 
     compile 'org.slf4j:slf4j-api:1.7.21'
 
-     //sparkの追加ーーーーーーーーーーーーーーーーーーーーーーーー
-    compile 'com.sparkjava:spark-core:2.0.0'
-
-    compile 'com.sparkjava:spark-core:2.6.0'
     compile 'org.thymeleaf:thymeleaf:3.0.8.RELEASE'
-    compile 'com.sparkjava:spark-template-thymeleaf:2.5.5'
 
-    compile 'org.slf4j:slf4j-simple:1.7.6'
 
      //アパッチベロシティ（オープンソースのjavaベースの汎用テンプレートエンジン）を追加
     compile 'org.apache.velocity:velocity:1.7'
@@ -47,4 +41,6 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
 }

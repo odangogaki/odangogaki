@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class WordBookDB {
+public class WordBookDB implements AutoCloseable{
 
 	private Connection con = null;
 	private Statement stmt = null;

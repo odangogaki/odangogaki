@@ -34,7 +34,7 @@ public class Title {
 		//http://localhost:4567でみれるように
 		get("/title", (request,responce) ->{
 
-			HashMap model = new HashMap();
+			HashMap<String, String> model = new HashMap<String, String>();
 			model.put("templatelayout", "templates/title.vtl");
 
 			return new ModelAndView(model, layout);
@@ -45,7 +45,7 @@ public class Title {
 
 		get("/setting",(request,responce) ->{
 
-			HashMap model= new HashMap();
+			HashMap<String,String> model= new HashMap<String, String>();
 
 			model = setting(/*request*/);
 
@@ -60,7 +60,7 @@ public class Title {
 
 		get("/register",(request,replace) ->{
 
-			HashMap model =new HashMap();
+			HashMap<String,String> model =new HashMap<String,String>();
 
 
 
@@ -86,7 +86,7 @@ public class Title {
 
 
 
-			HashMap model = new HashMap();
+			HashMap<String, String> model = new HashMap<String,String>();
 
 			delete(request);
 
@@ -115,7 +115,7 @@ public class Title {
 
 
 
-			HashMap model = new HashMap();
+			HashMap<String, String> model = new HashMap<String,String>();
 
 			model = playing(request);
 
@@ -139,7 +139,7 @@ public class Title {
 
 
 
-			HashMap model = new HashMap();
+			HashMap<String, String> model = new HashMap<String, String>();
 
 
 			model = playing(request);
@@ -162,7 +162,7 @@ public class Title {
 
 		get("/result",(request,resonce) ->{
 
-			HashMap model = new HashMap();
+			HashMap<String, String> model = new HashMap<String, String>();
 			int clearcount =0;
 
 
@@ -187,16 +187,15 @@ public class Title {
 	}
 
 
-	public static HashMap setting(/*Request request*/){
-		WordBookDB db  = new WordBookDB();
+	public static HashMap<String, String> setting(/*Request request*/){
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
 		ArrayList<String> englishwordlist = new ArrayList<String>();
 		String[] japanesecodearray = new String[30];
 		String[] englishcodearray = new String[30];
-		HashMap model= new HashMap();
+		HashMap<String, String> model= new HashMap<String, String>();
 
 		int countwordlist =0;
-		try{
+		try(WordBookDB db  = new WordBookDB()){
 			String mysql = "select * from english order by id";
 			System.out.println(mysql);
 
@@ -214,60 +213,25 @@ public class Title {
 					countwordlist++;
 				}
 
-				String[] japanesearray = new String[japanesewordlist.size()];
-				japanesearray = (String[])japanesewordlist.toArray(new String[]{});
-				String[] englisharray = new String[englishwordlist.size()];
-				englisharray = (String[]) englishwordlist.toArray(new String[]{});;
-				model.put("listsize", japanesewordlist.size());
+			
+					model.put("listsize", ""+japanesewordlist.size());
 
-				 for(int i = 0; i<30; i++){
+				 for(int i = 0; i<japanesewordlist.size(); i++){
 					japanesecodearray[i] = "japanese"+i;
 					englishcodearray[i] = "english"+i;
-
-					if(i<japanesewordlist.size()){
-						System.out.println(japanesearray[i]);
-						model.put(japanesecodearray[i], japanesearray[i]);
-						model.put(englishcodearray[i], englisharray[i]);
-
-					}else{
-						model.put(japanesecodearray[i], null);
-						model.put(englishcodearray[i], null);
-
-					}
+					model.put("japanesekey", "" +japanesewordlist);
+					model.put("englishkey", "" +englishwordlist);
 				 }
-
-
-
 
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-		}finally{
-			db.close();
 		}
-
-
-
-
-
-
-
-
 //		System.err.println("Request parameters:"+(Arrays.asList(request.queryMap())));
-
 		//データの数がわかる
 //		System.err.println("count of params: " + request.queryMap().toMap().size());
-
-
-
-
-
-
-
-
-
 		model.put("templatelayout", "templates/setting.vtl");
 		return (model);
 	}
@@ -293,7 +257,7 @@ public class Title {
 		ArrayList<String> englishwordlist = new ArrayList<String>();
 		String[] japanesecodearray = new String[30];
 		String[] englishcodearray = new String[30];
-		HashMap model= new HashMap();
+		HashMap<String, String> model= new HashMap<String, String>();
 
 
 
@@ -376,7 +340,7 @@ public class Title {
 		ArrayList<String> englishwordlist = new ArrayList<String>();
 		String[] japanesecodearray = new String[30];
 		String[] englishcodearray = new String[30];
-		HashMap model= new HashMap();
+		HashMap<?, ?> model= new HashMap<Object, Object>();
 
 
 
@@ -442,7 +406,7 @@ public class Title {
 	}
 
 
-	public static HashMap playing(Request request){
+	public static HashMap<String, String> playing(Request request){
 
 
 
@@ -626,7 +590,7 @@ public class Title {
 	public static HashMap clearcountresultandclear(){
 		int clearcount =0;
 
-		HashMap model = new HashMap();
+		HashMap model = new HashMap<Object, Object>();
 
 
 

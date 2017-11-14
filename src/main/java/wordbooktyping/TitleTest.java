@@ -1,86 +1,99 @@
 package wordbooktyping;
 
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import spark.Request;
 
 public class TitleTest extends Title {
 
+	static ArrayList<String> japanesewordlist = new ArrayList<String>();
+	static ArrayList<String> englishwordlist = new ArrayList<String>();
+
+	@BeforeClass
+	public static void 前準備としてテスト前のデータをリストに逃がしDBのデータを削除後テスト用のデータを入れる(){
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japanesewordlist.add(japanese);
+					englishwordlist.add(english);
+				}
+				String deletemysql = "delete from english";
+				db.executeUpdate(deletemysql);
+				for(int i = 0; i<2; i++){
+					String testmysql = "insert into english(japanese , english)values('テスト" + i+ "' , 'test"+ i +"');";
+					db.executeUpdate(testmysql);
+				}
+			}catch(BadSQLException e){
+				System.out.print("登録、もしくは削除できませんでした");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@AfterClass
+	public static void テスト前のデータを復活させる(){
+		try(WordBookDB db = new WordBookDB()){
+			db.open();
+			String deletemysql = "delete from english";
+			db.executeUpdate(deletemysql);
+			for(int j = 0; j<japanesewordlist.size(); j++){
+				String mysql = "insert into english(japanese , english)values('"+ japanesewordlist.get(j) + "' , '" + englishwordlist.get(j) + "');";
+				db.executeUpdate(mysql);
+			}
+		}catch(BadSQLException e){
+			System.out.println("aftercareは登録できませんでした");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+//HashMapのジェネリクスを外すとassertThatにエラーが発生（junitのフレームワークの問題）
+	@Test
+	public void 設定ページのvtlファイルが返されるか確認() throws Exception{
+		assertThat(Title.setting() ,hasEntry("templatelayout" , "templates/setting.vtl"));
+	}
+
+	@Test
+	public void 登録してある単語の対の数listsizeが返されるか確認() throws Exception{
+		assertThat(Title.setting() ,hasEntry("listsize" , "2"));
+	}
+
+	@Test
+	public void 登録してある日本語の単語japanesewordlist配列が返されるか確認() throws Exception{
+		assertThat(Title.setting() ,hasEntry("japanesekey" , "[テスト0, テスト1]"));
+	}
+
+	@Test
+	public void 登録してある英語の単語englishwordlist配列が返されるか確認() throws Exception{
+		assertThat(Title.setting() ,hasEntry("englishkey" , "[test0, test1]"));
+	}
+
+
 
 
 	@Test
-	public void settingTest() throws Exception{
+	public void DBのデータに余分なものがないか個数を確認() throws Exception{
 
-		Title title = new Title();
-		HashMap model = new HashMap();
-
-		//ここからのHashMap modelへの設定は現在のMySQLのデータで確認
-		//(localhost user:admin password:slime825)
-		model.put("japanese0", "空");
-		model.put("japanese1", "水");
-		model.put("japanese2", "りんご");
-		model.put("japanese3", "化学");
-		model.put("japanese4", "体");
-		model.put("japanese5", "太陽");
-		model.put("japanese6", "海");
-		model.put("japanese7", "水素");
-		model.put("japanese8", "酸素");
-		model.put("japanese9", "炭素");
-
-
-		model.put("japanese10", "窒素");
-		model.put("japanese11", "アルミニウム");
-		model.put("japanese12", "カリウム");
-		model.put("japanese13", "水銀");
-		model.put("japanese14", "あ");
-		model.put("japanese15", "j");
-		model.put("japanese16", "あいうえお");
-		model.put("japanese17", "時計");
-		model.put("japanese18", "道路");
-
-
-		model.put("english0", "sky");
-		model.put("english1", "water");
-		model.put("english2", "apple");
-		model.put("english3", "chemical");
-		model.put("english4", "body");
-		model.put("english5", "sun");
-		model.put("english6", "ocean");
-		model.put("english7", "H");
-		model.put("english8", "O");
-		model.put("english9", "C");
-
-		model.put("english10", "N");
-		model.put("english11", "Al");
-		model.put("english12", "K");
-		model.put("english13", "Hg");
-		model.put("english14", "a");
-		model.put("english15", "j");
-		model.put("english16", "aiueo");
-		model.put("english17", "clock");
-		model.put("english18", "road");
-
-		model.put("templatelayout", "templates/setting.vtl");
-		model.put("listsize", 19);
-
-
-		for(int i = 19; i<30; i++){
-			model.put("japanese" + i, null);
-			model.put("english" + i, null);
-		}
-
-
-
-
-
-
-		assertEquals(model,title.setting());
+		assertThat(Title.setting().size() ,is(4));
 
 	}
+
 
 
 
