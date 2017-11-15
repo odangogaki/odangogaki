@@ -212,7 +212,7 @@
 
 
 
-
+#*
 		for(var j = 0; j<30; j++){
 
 			console.log($('#' + 'je' +j).text());
@@ -225,7 +225,7 @@
 
 		}
 
-
+*#
 
 
 
@@ -235,36 +235,18 @@
 
 		function colorON(object){
 
-
 			alert('テスト');
 
-
-
-
 			console.log(object);
-
 			console.log(object.id);
-
-			for(var i = 0; i<30; i++){
-
+			for(var i = 0; i<$listsize; i++){
 				$('#' + 'je' + i).css('background', 'orange');
-
 			}
-
 			$('#' + object.id).css('background','blue');
-
 			deleteobject = $('#' + object.id).text();
-
 			console.log(deleteobject);
-
-
-
-
-				document.getElementById('deletebutton').value = deleteobject;
-				console.log("OK");
-
-
-
+			document.getElementById('deletebutton').value = deleteobject;
+			console.log("OK");
 			console.log(document.getElementById('deletebutton').value);
 
 

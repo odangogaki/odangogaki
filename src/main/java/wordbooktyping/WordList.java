@@ -1,5 +1,6 @@
 package wordbooktyping;
 
+//使ってはないクラス
 import java.sql.ResultSet;
 import java.util.ArrayList;
 

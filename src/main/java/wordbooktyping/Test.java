@@ -1,5 +1,7 @@
 package wordbooktyping;
 
+
+//何か実装するときのテスト用クラス、使ってはない
 public class Test {
 
 	public static void main(String[]args){

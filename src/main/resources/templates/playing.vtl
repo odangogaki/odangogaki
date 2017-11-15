@@ -24,7 +24,7 @@
 
 				<div class="col-xs-12" style="background:silver; height:100% ;">
 					<div class="progress"   style=" bottom:0; right:0; top:0; position:absolute; margin:auto; width:75%; height:70%; border:double; border-width:5px" >
-					  <div id= "progress" class="progress-bar progress-bar-striped active progress-bar-success" id="timeprogressbar"  role="progressbar" aria-valuenow="70%"
+					  <div id= "progress" class="progress-bar progress-bar-striped active progress-bar-success"   role="progressbar" aria-valuenow="70%"
 					 		 aria-valuemin="0" aria-valuemax="100" style="width:100%;" >
 					    <span class="sr-only">70% Complete</span>
 					  </div>
@@ -73,17 +73,7 @@
 
 		<script language="JavaScript">
 
-
-
-
-
 				var answerlength = $answerlength;
-
-
-
-
-
-
 
 			var answercharAt = [
 
@@ -112,60 +102,28 @@
 
 			var nowmoziplace = 0;
 
-
-
-
-
 			window.onkeypress = function(e){
-
-
 				if(e.key === answercharAt[nowmoziplace]){
 					console.log("正解！");
 					$answer = "";
-
 					for(var j=nowmoziplace + 1; j<$answerlength; j++){
-
-
 							$answer = $answer + answercharAt[j];
-
-
-
-							}
-
-
-							document.getElementById("enemy").value = $answer;
-
-							nowmoziplace = nowmoziplace + 1;
-
-							if(nowmoziplace === $answerlength){
-									console.log("全問正解！");
-									location.href='/playing2';
-
-
-
+					}
+					document.getElementById("enemy").value = $answer;
+					nowmoziplace = nowmoziplace + 1;
+					if(nowmoziplace === $answerlength){
+						console.log("全問正解！");
+						location.href='/playing2';
 
 					}
-
-
 				}
-
-
-
-
 			}
 
 
-
-
-
-
 			$(function(){
-				$('#timeprogressbar').css('width','100%');
+				$('#progress').css('width','100%');
 			});
-
-
 			$(function(){
-
 				var i= 0;
 				var timebar = 100;
 				var enemyposition = 0;
@@ -174,12 +132,9 @@
 					i++;
 					timebar = timebar -1;
 					enemyposition = enemyposition +0.7;
-						$('#timeprogressbar').css('width',timebar +'%');
-						console.log(timebar);
-						$('#enemy').css('right',enemyposition  + '%');
-
-
-
+					$('#progress').css('width',timebar +'%');
+					console.log(timebar);
+					$('#enemy').css('right',enemyposition  + '%');
 					var id = setTimeout(function(){
 						typingtimer();
 						console.log(i);
