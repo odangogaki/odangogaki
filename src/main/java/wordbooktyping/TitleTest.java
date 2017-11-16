@@ -1,8 +1,8 @@
 package wordbooktyping;
 
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -1034,8 +1034,22 @@ public class TitleTest extends Title {
 
 
 //=================createrandomメソッドのテスト開始======================
-
+	@Test
 	public void createrandomTest(){
+		int ransu=0;
+		int baainokazu=0;
+		int kakuritu = 0;
+		for(int i=0; i<100; i++){
+			ransu = createrandom();
+			if(ransu == 1){
+				baainokazu = baainokazu +1;
+			}
+		}
+
+		kakuritu = baainokazu;
+		System.out.println("確率は"+kakuritu);
+
+		assertThat((double)kakuritu, is(closeTo(50, 10)));
 
 	}
 
