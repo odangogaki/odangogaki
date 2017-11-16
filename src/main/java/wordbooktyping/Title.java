@@ -5,7 +5,6 @@ import static spark.Spark.*;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -52,7 +51,11 @@ public class Title {
 
 		get("/register",(request,replace) ->{
 			HashMap<String,String> model =new HashMap<String,String>();
-			registry(request);
+			String valueOfregisterKey =  requestqueryParams(request, "register");
+			String valueOfjapaneseKey = requestqueryParams(request, "japanese");
+			String valueOfenglishKey = requestqueryParams(request, "english");
+
+			registry(valueOfregisterKey, valueOfjapaneseKey, valueOfenglishKey);
 			model = setting(/*request*/);
 			return new ModelAndView(model, layout);
 		},new VelocityTemplateEngine());
@@ -61,8 +64,9 @@ public class Title {
 
 		get("/delete",(request,replace) ->{
 			HashMap<String, String> model = new HashMap<String,String>();
-			delete(request);
-			model = setting(/*request*/);
+			String valueOfdeleteKey = requestqueryParams(request, "delete") ;
+			delete(valueOfdeleteKey);
+			model = setting();
 			model.put("templatelayout", "templates/setting.vtl");
 			return new ModelAndView(model, layout);
 
@@ -100,7 +104,7 @@ public class Title {
 	}
 
 
-	public static HashMap<String, String> setting(/*Request request*/){
+	public static HashMap<String, String> setting(){
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
 		ArrayList<String> englishwordlist = new ArrayList<String>();
 		HashMap<String, String> model= new HashMap<String, String>();
@@ -138,9 +142,15 @@ public class Title {
 		return (model);
 	}
 
+//パラメーターを抽出するメソッド
+	public static String requestqueryParams(Request request, String key){
+		String stringparameter = request.queryParams(key);
+		return stringparameter;
+	}
 
-	public static void registry(Request request){
-		System.out.println(request);
+
+	public static void registry(String valueOfregisterKey, String valueOfjapaneseKey, String valueOfenglishKey){
+/*		System.out.println(request);
 		request.queryMap().toMap().entrySet().forEach(e ->
 		System.err.println(e.getKey() + "=" + Arrays.toString(e.getValue())));
 
@@ -148,7 +158,7 @@ public class Title {
 
 		//データの数がわかる
 		System.err.println("count of params: " + request.queryMap().toMap().size());
-
+*/
 
 		WordBookDB db  = new WordBookDB();
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
@@ -156,18 +166,15 @@ public class Title {
 		String[] japanesecodearray = new String[30];
 		String[] englishcodearray = new String[30];
 		HashMap<String, String> model= new HashMap<String, String>();
-
-		if(request.queryParams("register").equals("touroku")){
-
-			String addjapanese = request.queryParams("japanese");
-			String addenglish = request.queryParams("english");
+//valueOfregisterKeyの値はregisterのkeyでとってきた値、htmlで"touroku"と定めてある
+		if(valueOfregisterKey.equals("touroku")){
 
 				WordBookDB adddb = new WordBookDB();
 			try{
 
-				if(!addjapanese.equals("") && !addenglish.equals("")){
+				if(!valueOfjapaneseKey.equals("") && !valueOfenglishKey.equals("")){
 
-					String mysql = "insert into english(japanese, english)values('"+ addjapanese + "','" + addenglish +"')";
+					String mysql = "insert into english(japanese, english)values('"+ valueOfjapaneseKey + "','" + valueOfenglishKey +"')";
 					System.out.println(mysql);
 
 					//データベースに接続して閉じるまでの基本的な流れ
@@ -178,9 +185,9 @@ public class Title {
 					int num = adddb.executeUpdate(mysql);
 					System.out.println(num +"件登録しました");
 
-					model.put("japanese", addjapanese);
-					model.put("english", addenglish);
-					System.out.println(addjapanese +"="+addenglish);
+					model.put("japanese", ""+valueOfjapaneseKey);
+					model.put("english", ""+valueOfenglishKey);
+					System.out.println(valueOfjapaneseKey +"="+valueOfenglishKey);
 				}
 
 			}catch(BadSQLException e){
@@ -195,22 +202,15 @@ public class Title {
 
 	}
 
-
-	public static void delete(Request request){
-
+//valueOfdeleteKeyは japanese = englishの形で代入される
+	public static void delete(String valueOfdeleteKey){
+/*
 		request.queryMap().toMap().entrySet().forEach(e ->
 		System.err.println(e.getKey() + "=" + Arrays.toString(e.getValue())));
-
-
-
-
-
-
 		System.err.println("Request parameters:"+(Arrays.asList(request.queryMap())));
-
 		//データの数がわかる
 		System.err.println("count of params: " + request.queryMap().toMap().size());
-
+*/
 
 		WordBookDB db  = new WordBookDB();
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
@@ -220,48 +220,28 @@ public class Title {
 		HashMap<?, ?> model= new HashMap<Object, Object>();
 		/////////////////////////////////////////////////
 
-		if(!request.queryParams("delete").equals(null)){
-
-
-
-			String deleteparam = request.queryParams("delete");
-
-
-
-				WordBookDB deletedb = new WordBookDB();
-			try{
-
-					//データベースに接続して閉じるまでの基本的な流れ
-					//DBのメソッドをまとめたクラスWordBookDBのインスタンス化
-					//DBに接続
-					deletedb.open();
-					//（追加、削除、更新）するSQL文の実行（または検索するSQL文の実行）
-
-					String[] deleteparamsplit = deleteparam.split(" ");
-					for(int i = 0; i< deleteparamsplit.length; i++){
-						System.out.println(deleteparamsplit[i]);
-					}
-
-					String deletemysql = "delete from english where japanese = '"+ deleteparamsplit[0] +"';";
-					System.out.println(deletemysql);
-
-
-					int num = deletedb.executeUpdate(deletemysql);
-					System.out.println(num +"件削除しました");
-
+		if(!valueOfdeleteKey.equals(null)){
+			try(WordBookDB deletedb = new WordBookDB()){
+				//データベースに接続して閉じるまでの基本的な流れ
+				//DBのメソッドをまとめたクラスWordBookDBのインスタンス化
+				//DBに接続
+				deletedb.open();
+				//（追加、削除、更新）するSQL文の実行（または検索するSQL文の実行）
+				String[] deleteparamsplit = valueOfdeleteKey.split(" ");
+				for(int i = 0; i< deleteparamsplit.length; i++){
+					System.out.println(deleteparamsplit[i]);
+				}
+				String deletemysql = "delete from english where japanese = '"+ deleteparamsplit[0] +"';";
+				System.out.println(deletemysql);
+				int num = deletedb.executeUpdate(deletemysql);
+				System.out.println(num +"件削除しました");
 			}catch(BadSQLException e){
 				System.out.println("削除できませんでした");
 			}catch(Exception e){
 				e.printStackTrace();
-			}finally{
-				deletedb.close();
 			}
-
-
 		}
-
 	}
-
 
 	public  static HashMap<String, String> playing(int ransu){
 

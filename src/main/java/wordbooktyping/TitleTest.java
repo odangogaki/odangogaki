@@ -1,8 +1,8 @@
 package wordbooktyping;
 
 
-import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -112,20 +112,852 @@ public class TitleTest extends Title {
 //===============registryメソッドのテスト開始＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝//
 
 	@Test
-	public void registryTest() throws Exception{
+	public void registryメソッドでクライアントから受け取ったRequestの情報にregisterキーで登録されたtourokuの値がある場合japaneseの登録内容が正しく登録されているか確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
 
+		String registervalue = "touroku";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "registertest";
 
+		Title.registry(registervalue, japanesevalue, englishvalue);
 
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//				model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("japanesekey", "[テスト0, テスト1, 登録テスト]"));
+
+				String deletemysql = "delete from english where japanese = '登録テスト';";
+				db.executeUpdate(deletemysql);
+
+			}catch(BadSQLException e){
+				System.out.print("登録テスト用のデータの削除ができませんでした");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にregisterキーで登録されたtourokuの値がある場合englishの登録内容が正しく登録されているか確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//				model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("englishkey", "[test0, test1, registertest]"));
+
+				String deletemysql = "delete from english where english = 'registertest';";
+				db.executeUpdate(deletemysql);
+
+			}catch(BadSQLException e){
+				System.out.print("登録テスト用のデータの削除ができませんでした");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にregisterキーで登録されたtourokuの値がある場合登録内容に余分なものがないか確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+				assertThat(japaneseregistry.size(), is(3));
+
+				String deletemysql = "delete from english where english = 'registertest';";
+				db.executeUpdate(deletemysql);
+			}catch(BadSQLException e){
+				System.out.print("登録テスト用のデータの削除ができませんでした");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+//registerキーの内容がtourokuでない場合
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にregisterキーで登録されたtourokuの値がない場合japaneseの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "間違えたー！";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//				model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("japanesekey", "[テスト0, テスト1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にregisterキーで登録されたtourokuの値がない場合englishの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "間違えたー！";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//				model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("englishkey", "[test0, test1]"));
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にregisterキーで登録されたtourokuの値がない場合登録内容に余分なものがないか確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+
+		String registervalue = "間違えたー！";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+				assertThat(japaneseregistry.size(), is(2));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
+//registerキーの内容がtourokuの場合
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にjapaneseキーで登録されたjapaneseの値がない場合japaneseの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//					model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("japanesekey", "[テスト0, テスト1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にjapaneseキーで登録されたjapaneseの値がない場合englishの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//					model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("englishkey", "[test0, test1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にenglishキーで登録されたenglishの値がない場合englishの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//					model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("englishkey", "[test0, test1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にenglishキーで登録されたjapaneseの値がない場合englishの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//					model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("japanesekey", "[テスト0, テスト1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にjapaneseキーで登録されたjapaneseの値がない場合登録内容に余分なものがないか確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+
+		String registervalue = "touorku";
+		String japanesevalue = "";
+		String englishvalue = "registertest";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+				assertThat(japaneseregistry.size(), is(2));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 
 
 	@Test
-	public void deleteTest() throws Exception{
+	public void registryメソッドでクライアントから受け取ったRequestの情報にenglishキーで登録されたenglishの値がない場合登録内容に余分なものがないか確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
 
+		String registervalue = "touorku";
+		String japanesevalue = "登録テスト";
+		String englishvalue = "";
 
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+				assertThat(japaneseregistry.size(), is(2));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
+
+
+//japaneseもenglishもどっちもあってない
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にenglishキーで登録されたenglishの値とjapaneseキーで登録されたjapaneseの値がどちらもない場合englishの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "";
+		String englishvalue = "";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//					model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("englishkey", "[test0, test1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にenglishキーで登録されたenglishの値とjapaneseキーで登録されたjapaneseの値がどちらもない場合japaneseの内容が登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+		HashMap<String, String> model = new HashMap<String, String>();
+
+		String registervalue = "touroku";
+		String japanesevalue = "";
+		String englishvalue = "";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+//					model.put("listsizeafterregistry", japaneseregistry.size());
+				model.put("japanesekey", ""+japaneseregistry);
+				model.put("englishkey", ""+englishregistry);
+
+				assertThat(model, hasEntry("japanesekey", "[テスト0, テスト1]"));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void registryメソッドでクライアントから受け取ったRequestの情報にenglishキーで登録されたenglishの値とjapaneseキーで登録されたjapaneseの値がどちらもない場合登録内容に余分なものが登録されていないことの確認()throws Exception{
+		ArrayList<String> japaneseregistry = new ArrayList<>();
+		ArrayList<String> englishregistry = new ArrayList<>();
+
+		String registervalue = "touorku";
+		String japanesevalue = "";
+		String englishvalue = "";
+
+		Title.registry(registervalue, japanesevalue, englishvalue);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					japaneseregistry.add(japanese);
+					englishregistry.add(english);
+				}
+
+				assertThat(japaneseregistry.size(), is(2));
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+//=================registryメソッドのテスト終了==========================
+
+
+//=================deleteメソッドのテスト開始==========================
+
+
+
+//消去したい文字列が何らかの理由で存在しない場合
+	@Test
+	public void deleteメソッドで消去したい文字列が何らかの理由で選択できていない場合のDBのjapaneseのデータが変わらないことの確認() throws Exception{
+
+		String valueOfdelete = "";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertThat(deleteTestjapanese,contains("テスト0", "テスト1"));
+	}
+
+	@Test
+	public void deleteメソッドで消去したい文字列が何らかの理由で選択できていない場合のDBのenglishのデータが変わらないことの確認() throws Exception{
+
+		String valueOfdelete = "";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertThat(deleteTestenglish,contains("test0", "test1"));
+	}
+
+	@Test
+	public void deleteメソッドで消去したい文字列が何らかの理由で選択できていない場合のDBのデータの数が変わらないことの確認() throws Exception{
+
+		String valueOfdelete = "";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertThat(deleteTestjapanese.size(),is(2));
+	}
+
+
+//消去したい文字列が選択できている場合
+	@Test
+	public void deleteメソッドで消去したい文字列がテスト0equaltest0場合のDBのjapaneseのデータが削除されていることの確認() throws Exception{
+
+		String valueOfdelete = "テスト0 = test0";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+				assertThat(deleteTestjapanese,contains("テスト1"));
+				Title.delete("テスト1 = test1");
+				String insertmysql = "insert into english(japanese, english)values('テスト0', 'test0'),('テスト1', 'test1');";
+				db.executeUpdate(insertmysql);
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void deleteメソッドで消去したい文字列がテスト0equaltest0場合のDBのenglishのデータが削除されていることの確認() throws Exception{
+
+		String valueOfdelete = "テスト0 = test0";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+				assertThat(deleteTestenglish,contains("test1"));
+				Title.delete("テスト1 = test1");
+				String insertmysql = "insert into english(japanese, english)values('テスト0', 'test0'),('テスト1', 'test1');";
+				db.executeUpdate(insertmysql);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void deleteメソッドで消去したい文字列がテスト0equaltest0場合のDBのデータの数が1つ減っていることの確認() throws Exception{
+
+		String valueOfdelete = "テスト0 = test0";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+				assertThat(deleteTestjapanese.size(),is(1));
+				Title.delete("テスト1 = test1");
+				String insertmysql = "insert into english(japanese, english)values('テスト0', 'test0'),('テスト1', 'test1');";
+				db.executeUpdate(insertmysql);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
+	@Test
+	public void deleteメソッドで消去したい文字列がテスト1equaltest1場合のDBのjapaneseのデータが削除されていることの確認() throws Exception{
+
+		String valueOfdelete = "テスト1 = test1";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+		Title.delete(valueOfdelete);
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+				assertThat(deleteTestjapanese,contains("テスト0"));
+				Title.delete("テスト0 = test0");
+				String insertmysql = "insert into english(japanese, english)values('テスト0', 'test0'),('テスト1', 'test1');";
+				db.executeUpdate(insertmysql);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void deleteメソッドで消去したい文字列がテスト1equaltest1場合のDBのenglishのデータが削除されていることの確認() throws Exception{
+
+		String valueOfdelete = "テスト1 = test1";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+
+		Title.delete(valueOfdelete);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+				assertThat(deleteTestenglish,contains("test0"));
+				Title.delete("テスト0 = test0");
+				String insertmysql = "insert into english(japanese, english)values('テスト0', 'test0'),('テスト1', 'test1');";
+				db.executeUpdate(insertmysql);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void deleteメソッドで消去したい文字列がテスト1equaltest1場合のDBのデータの数が1つ減っていることの確認() throws Exception{
+
+		String valueOfdelete = "テスト1 = test1";
+		ArrayList<String> deleteTestjapanese = new ArrayList<String>();
+		ArrayList<String> deleteTestenglish = new ArrayList<String>();
+
+		Title.delete(valueOfdelete);
+
+		try(WordBookDB db = new WordBookDB()){
+			String mysql = "select * from english order by id";
+			db.open();
+			ResultSet rs = db.executeQuery(mysql);
+			try{
+				while(rs.next()){
+					String japanese = rs.getString("japanese");
+					String english = rs.getString("english");
+					deleteTestjapanese.add(japanese);
+					deleteTestenglish.add(english);
+				}
+				assertThat(deleteTestjapanese.size(),is(1));
+				Title.delete("テスト0 = test0");
+				String insertmysql = "insert into english(japanese, english)values('テスト0', 'test0'),('テスト1', 'test1');";
+				db.executeUpdate(insertmysql);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+//=================deleteメソッドのテスト終了==========================
+
 
 
 //=================playingメソッドのテスト開始==========================
@@ -201,10 +1033,14 @@ public class TitleTest extends Title {
 //=================playingメソッドのテスト終了======================
 
 
+//=================createrandomメソッドのテスト開始======================
+
 	public void createrandomTest(){
 
 	}
 
+
+//=================createrandomメソッドのテスト終了======================
 
 //=================clearcountupメソッドのテスト開始======================
 	@Test
