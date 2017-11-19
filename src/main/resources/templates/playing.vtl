@@ -38,7 +38,7 @@
 
 			<div class="row"  id ="middle" style="height:40vh; background:lightblue; border-bottom:ridge brown 5px ; " >
 				<div class="col-xs-3" style=" height:100%;">
-					<img src='/images/odanngogaki.png' alt="odagogaki" style="height:100%; width:100%;  top:0; bottom:0;left:0; position:absolute; margin:auto; " >
+					<img src='/images/odanngogaki.png' id="odangogaki" alt="odagogaki" style="height:100%; width:100%;  top:0; bottom:0;left:0; position:absolute; margin:auto; " >
 				</div>
 
 
@@ -139,6 +139,16 @@
 						typingtimer();
 						console.log(i);
 					}, 100);
+
+					if(timebar<=75 && timebar>50){
+						document.getElementById("odangogaki").src = "/images/odangogaki2.png"
+					}else if(timebar<=50 && timebar>25){
+						document.getElementById("odangogaki").src = "/images/odangogaki3.png"
+					}else if(timebar <=25 && timebar>0){
+						document.getElementById("odangogaki").src = '/images/odangogaki5.png'
+
+					}
+
 					if(i>100){
 						clearTimeout(id);
 						console.log("終了");

@@ -40,8 +40,6 @@ public class Title {
 		},new VelocityTemplateEngine());
 
 
-
-
 		get("/setting",(request,responce) ->{
 			HashMap<String,String> model= new HashMap<String, String>();
 			model = setting(/*request*/);
@@ -60,7 +58,6 @@ public class Title {
 			return new ModelAndView(model, layout);
 		},new VelocityTemplateEngine());
 
-		/////////////////////////////////////////////////////////
 
 		get("/delete",(request,replace) ->{
 			HashMap<String, String> model = new HashMap<String,String>();
@@ -69,13 +66,9 @@ public class Title {
 			model = setting();
 			model.put("templatelayout", "templates/setting.vtl");
 			return new ModelAndView(model, layout);
-
-
-
-
-
-
 		},new VelocityTemplateEngine());
+
+
 		get("/playing", (request,responce)->{
 			HashMap<String, String> model = new HashMap<String,String>();
 			int ransu = createrandom();
@@ -93,14 +86,11 @@ public class Title {
 		},new VelocityTemplateEngine());
 
 
-
 		get("/result",(request,resonce) ->{
 			HashMap<String, String> model = new HashMap<String, String>();
 			model = clearcountresultandclear();
 			return new ModelAndView(model, layout);
 		}, new VelocityTemplateEngine());
-
-
 	}
 
 
@@ -159,67 +149,37 @@ public class Title {
 		//データの数がわかる
 		System.err.println("count of params: " + request.queryMap().toMap().size());
 */
-
-		WordBookDB db  = new WordBookDB();
-		ArrayList<String> japanesewordlist = new ArrayList<String>();
-		ArrayList<String> englishwordlist = new ArrayList<String>();
-		String[] japanesecodearray = new String[30];
-		String[] englishcodearray = new String[30];
+//		ArrayList<String> japanesewordlist = new ArrayList<String>();
+//		ArrayList<String> englishwordlist = new ArrayList<String>();
 		HashMap<String, String> model= new HashMap<String, String>();
 //valueOfregisterKeyの値はregisterのkeyでとってきた値、htmlで"touroku"と定めてある
 		if(valueOfregisterKey.equals("touroku")){
-
-				WordBookDB adddb = new WordBookDB();
-			try{
-
+			try(WordBookDB adddb = new WordBookDB()){
 				if(!valueOfjapaneseKey.equals("") && !valueOfenglishKey.equals("")){
-
 					String mysql = "insert into english(japanese, english)values('"+ valueOfjapaneseKey + "','" + valueOfenglishKey +"')";
 					System.out.println(mysql);
-
 					//データベースに接続して閉じるまでの基本的な流れ
 					//DBのメソッドをまとめたクラスWordBookDBのインスタンス化
 					//DBに接続
 					adddb.open();
 					//（追加、削除、更新）するSQL文の実行（または検索するSQL文の実行）
 					int num = adddb.executeUpdate(mysql);
-					System.out.println(num +"件登録しました");
-
-					model.put("japanese", ""+valueOfjapaneseKey);
-					model.put("english", ""+valueOfenglishKey);
-					System.out.println(valueOfjapaneseKey +"="+valueOfenglishKey);
+//					System.out.println(num +"件登録しました");
+//					model.put("japanese", ""+valueOfjapaneseKey);
+//					model.put("english", ""+valueOfenglishKey);
+//					System.out.println(valueOfjapaneseKey +"="+valueOfenglishKey);
 				}
-
 			}catch(BadSQLException e){
 				System.out.println("登録できませんでした");
 			}catch(Exception e){
 				e.printStackTrace();
-			}finally{
-				adddb.close();
 			}
-
 		}
 
 	}
 
 //valueOfdeleteKeyは japanese = englishの形で代入される
 	public static void delete(String valueOfdeleteKey){
-/*
-		request.queryMap().toMap().entrySet().forEach(e ->
-		System.err.println(e.getKey() + "=" + Arrays.toString(e.getValue())));
-		System.err.println("Request parameters:"+(Arrays.asList(request.queryMap())));
-		//データの数がわかる
-		System.err.println("count of params: " + request.queryMap().toMap().size());
-*/
-
-		WordBookDB db  = new WordBookDB();
-		ArrayList<String> japanesewordlist = new ArrayList<String>();
-		ArrayList<String> englishwordlist = new ArrayList<String>();
-		String[] japanesecodearray = new String[30];
-		String[] englishcodearray = new String[30];
-		HashMap<?, ?> model= new HashMap<Object, Object>();
-		/////////////////////////////////////////////////
-
 		if(!valueOfdeleteKey.equals(null)){
 			try(WordBookDB deletedb = new WordBookDB()){
 				//データベースに接続して閉じるまでの基本的な流れ
@@ -244,29 +204,14 @@ public class Title {
 	}
 
 	public  static HashMap<String, String> playing(int ransu){
-
-
-
-
-		Random rnd = new Random();
-
-		WordBookDB db  = new WordBookDB();
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
 		ArrayList<String> englishwordlist = new ArrayList<String>();
 		String[] japanesearray = null;
 		String[] englisharray =null;
 		char[] answercharAt;
-		int answerlength;
-		int clearcount =0;
-
-
 		HashMap<String,String> model = new HashMap<String,String>();
-
-		int countwordlist =0;
-		try{
+		try(WordBookDB db  = new WordBookDB()){
 			String mysql = "select * from english order by id";
-			System.out.println(mysql);
-
 			//DBに接続
 			db.open();
 			//結果をまるっと取得
@@ -278,55 +223,31 @@ public class Title {
 					String english = rs.getString("english");
 					japanesewordlist.add(japanese);
 					englishwordlist.add(english);
-					countwordlist++;
 				}
-
 				japanesearray = new String[japanesewordlist.size()];
 				japanesearray = (String[])japanesewordlist.toArray(new String[]{});
 				englisharray = new String[englishwordlist.size()];
 				englisharray = (String[]) englishwordlist.toArray(new String[]{});;
-
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-		}finally{
-			db.close();
-
 		}
-
-
-
 		model.put("question",japanesearray[ransu]);
 		model.put("answer", englisharray[ransu]);
-
-		System.out.println(englisharray[ransu]);
-
-//////////////////////////////////////////////////////////////////////////////
 		answercharAt = new char[englisharray[ransu].length()];
-
 		for(int j =0; j<answercharAt.length; j++){
 			answercharAt[j] = englisharray[ransu].charAt(j);
 			model.put("answercharAt"+j, ""+answercharAt[j]);
 		}
-
 		model.put("answerlength", ""+answercharAt.length);
-
-		System.out.println(answercharAt.length);
-		System.out.println(answercharAt[0]);
-
 		return (model);
-
 	}
-
-
-	//ＤＢに登録してあるデータの数の範囲内で乱数をつくるためのメソッド
+//ＤＢに登録してあるデータの数の範囲内で乱数をつくるためのメソッド
 	public static int createrandom(){
-
 		ArrayList<String> japanesewordlist = new ArrayList<String>();
 		Random rnd = new Random();
-
 		try(WordBookDB db  = new WordBookDB()){
 			String mysql = "select * from english order by id";
 			//DBに接続
@@ -344,13 +265,10 @@ public class Title {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
-
 		int ransu = rnd.nextInt(japanesewordlist.size());
 		return ransu;
-
 	}
-	//////////////////////////////////////乱数をつくるメソッドにテストコードはつくれる？？＝＝＝＝＝＝＝＝＝＝
+
 
 	public static void clearcountup(){
 		int clearcount = 0;
@@ -391,7 +309,7 @@ public class Title {
 
 	public static HashMap<String, String> clearcountresultandclear(){
 		int clearcount =0;
-		HashMap model = new HashMap<Object, Object>();
+		HashMap<String, String> model = new HashMap<String, String>();
 		//DBに接続
 		try(WordBookDB selectclearcountdb = new WordBookDB()){
 			selectclearcountdb.open();
@@ -410,7 +328,7 @@ public class Title {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		model.put("clearcount", clearcount);
+		model.put("clearcount", ""+clearcount);
 		model.put("templatelayout", "templates/result.vtl");
 			WordBookDB deleteclearcountdb = new WordBookDB();
 		try{
@@ -430,15 +348,7 @@ public class Title {
 		}finally{
 			deleteclearcountdb.close();
 		}
-
-
 		return (model);
 	}
-
-
-
-
-
-
 
 }

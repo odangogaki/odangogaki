@@ -1039,7 +1039,7 @@ public class TitleTest extends Title {
 		int ransu=0;
 		int baainokazu=0;
 		int kakuritu = 0;
-		for(int i=0; i<100; i++){
+		for(int i=0; i<10000; i++){
 			ransu = createrandom();
 			if(ransu == 1){
 				baainokazu = baainokazu +1;
@@ -1049,7 +1049,7 @@ public class TitleTest extends Title {
 		kakuritu = baainokazu;
 		System.out.println("確率は"+kakuritu);
 
-		assertThat((double)kakuritu, is(closeTo(50, 10)));
+		assertThat((double)kakuritu, is(closeTo(5000, 250)));
 
 	}
 
@@ -1097,7 +1097,7 @@ public class TitleTest extends Title {
 //上のclearcountupメソッドのテストを行うと、DB上のclearcountが1増えるので、設定値より1多い826を実際の値として返す
 	@Test
 	public void 正しいクリアした回数をDBから取得しているかの確認(){
-		assertThat(Title.clearcountresultandclear(), hasEntry("clearcount", 825));
+		assertThat(Title.clearcountresultandclear(), hasEntry("clearcount", "825"));
 	}
 
 	@Test
